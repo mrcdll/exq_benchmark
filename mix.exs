@@ -27,7 +27,9 @@ defmodule ExqBenchmark.MixProject do
       {:jason, "~> 1.1"},
       {:poolboy, "~> 1.5.1"},
       {:exq, "~> 0.13.3"},
-      {:gproc, "~> 0.8.0"}
+      {:gproc, "~> 0.8.0"},
+      {:benchee_html, "~> 1.0"},
+      {:benchee_markdown, "~> 0.1"}
     ]
   end
 end

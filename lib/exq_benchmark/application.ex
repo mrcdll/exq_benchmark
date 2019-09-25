@@ -8,6 +8,7 @@ defmodule ExqBenchmark.Application do
       [
         {Redix, name: :redix},
         :poolboy.child_spec(:worker, poolboy_config()),
+        :poolboy.child_spec(:sup_worker, poolboy_sup_config()),
         ExqBenchmark.GprocEnqueuer
       ] ++ named_enqueuer_pool(enqueuer_pool_size())
 
@@ -32,6 +33,14 @@ defmodule ExqBenchmark.Application do
     [
       {:name, {:local, :enqueuer}},
       {:worker_module, ExqBenchmark.PooledEnqueuer},
+      {:size, enqueuer_pool_size()}
+    ]
+  end
+
+  def poolboy_sup_config() do
+    [
+      {:name, {:local, :sup_enqueuer}},
+      {:worker_module, ExqBenchmark.PooledSupEnqueuer},
       {:size, enqueuer_pool_size()}
     ]
   end

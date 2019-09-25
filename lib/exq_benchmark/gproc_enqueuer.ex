@@ -12,18 +12,15 @@ defmodule ExqBenchmark.GprocEnqueuer do
     Enum.each(1..5, fn _ ->
       name = name()
 
-      Exq.Enqueuer.start_link(name: name)
-      :gproc_pool.add_worker(:gproc_pool, name)
-      :gproc_pool.connect_worker(:gproc_pool, name)
+      EnqueuerServer.start_link(name: name)
     end)
 
     {:ok, self()}
   end
 
   def enqueue() do
-    {_, _, [_, _, _, worker_name]} = :gproc_pool.pick(:gproc_pool)
-    pid = Process.whereis(:"#{worker_name}.Enqueuer")
-    Exq.enqueue(pid, "benchmark_queue", Worker, [])
+    pid = :gproc_pool.pick_worker(:gproc_pool)
+    EnqueuerServer.enqueue(pid)
   end
 
   defp name do

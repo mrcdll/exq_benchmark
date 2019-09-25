@@ -7,18 +7,17 @@ defmodule ExqBenchmarkTest do
         "poolboy enqueuer" => fn _ ->
           {:ok, _} = ExqBenchmark.Enqueuer.poolboy_enqueue()
         end,
-        "gproc enqueuer" => fn _ ->
-          ExqBenchmark.Enqueuer.gproc_enqueue()
-        end,
-        "named enqueuer" => fn _ ->
-          ExqBenchmark.Enqueuer.named_enqueue()
+        "poolboy enqueuer with process lookup" => fn _ ->
+          ExqBenchmark.Enqueuer.poolboy_sup_enqueue()
         end
       },
       warmup: 1,
       time: 4,
       parallel: parallel,
       formatters: [
-        {Benchee.Formatters.HTML, file: "output/#{parallel}parallel.html", auto_open: false},
+        {Benchee.Formatters.HTML,
+         file: "output/supervisor/#{parallel}parallel.html", auto_open: false},
+        {Benchee.Formatters.Markdown, file: "my.md"},
         Benchee.Formatters.Console
       ],
       before_scenario: fn _ ->
